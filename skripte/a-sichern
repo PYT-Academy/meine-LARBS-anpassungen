@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Das Script muss mit chmod ausführbar gemacht werden.
+# TODO: Automatisierung der Ausführungsberechtigungen beim Verschieben (mv).
+# Hinweis: Beim Kopieren (cp) innerhalb desselben Dateisystems sollten die Berechtigungen erhalten bleiben.
+# Manuelles Ausführbar machen mit chmod:
+# chmod +x scriptname (im verseichniss des Scriptes oder pfad mit angeben)
+
+# Farben und Rahmen definieren
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+FRAME="$========================================$"
+
+# eingehängtes Laufwerk
+ziel="/mnt/backup"
+
+# Zielverzeichnis für Backup auf dem eingehängten Laufwerk
+data="${ziel}/Sicherung"
+
+# Benutzerabfrage mit Timeout für neues Backup
+
+echo "Drücke 'j' für ein neues Backup in Sicherung, ansonsten startet das inkrementelle Backup in 5sec..."
+read -t 5 -p "Vollständiges Backup (j/n): " antwort
+
+if [ -d "$ziel" ]; then
+	if [[ $antwort == "j" ]]; then
+		echo -e "${RED}Vollständiges Backup wird durchgeführt.${NC}"
+		rm -rf "$data" # Löscht das Verzeicniss 'Sicherung' auf dem gemounteten Laufwerk 'backup'
+		mkdir -p "$data"
+		# Verwenden Sie hier cp oder tar für das vollständige Backup
+		# Beispiel: cp -a /home/sergi/ "$data"
+	else
+		echo -e "${GREEN}Inkrementelles Backup wird durchgeführt.${NC}"
+		# Erstellen der benötigten Verzeichnisse
+		mkdir -p \
+			"$data/.config/kak" \
+			"$data/.config/mc" \
+			"$data/.local/bin" \
+			"$data/.config/shell/aliasrc" \
+			"$data/.local/src" \
+			"$data/.config/zsh"
+		# Kopieren der verschiedenen Daten mit Fortschrittsbalken
+		echo -e "${GREEN}Synchronisiere Daten...${NC}"
+		rsync -avh /home/sergi/.config/kak			"$data/.config/kak/"
+		rsync -avh /home/sergi/.config/mc			"$data/.config/mc/"
+		rsync -avh /home/sergi/.local/bin			"$data/.local/bin/"
+		rsync -avh /home/sergi/.config/shell/aliasrc		"$data/.config/shell/aliasrc/"
+		rsync -avh /home/sergi/.local/src			"$data/.local/scr/"
+		rsync -avh /home/sergi/.config/zsh/.zshrc		"$data/.config/zsh/.zshrc"
+		rsync -avh /home/sergi/Dokumente			"$data"
+		rsync -avh /home/sergi/Calibre-Bibliothek		"$data"
+		rsync -avh /home/sergi/Bilder				"$data"
+		# meine eigenen Scripte auf GitHub sichern
+		rsync -avh /home/sergi/.local/bin/a-farbe		"/home/sergi/GitHub/meine-LARBS-anpassungen/skripte"
+		rsync -avh /home/sergi/.local/bin/a-sichern		"/home/sergi/GitHub/meine-LARBS-anpassungen/skripte"
+		# Trennlinie
+		echo -e "${BLUE}$FRAME${NC}"
+		# Anzeige der Gesamtgröße des Backup-Verzeichnissesi
+		echo -e "${GREEN}Gesamtgröße des Backup-Verzeichnisses:${NC}"
+		du -sh "$data"
+		# Abschlussmeldung mit Rahmen
+		echo -e "${BLUE}$FRAME"
+		echo -e "O=== Backup erfolgreich abgeschlossen ===O"
+		echo -e "$FRAME${NC}"
+	fi
+else
+    echo -e "${RED}Fehler: USB-Stick nicht gefunden.${NC}"
+fi
