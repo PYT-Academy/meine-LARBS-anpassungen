@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Schlüssel und ihre Pfade definieren
+declare -A ssh_keys
+ssh_keys["1"]="~/.ssh/id_ed25519" # PYT-Github
+ssh_keys["2"]="~/.ssh/id_rsa"     # Sergius-Github
+
+# Funktion zum Anzeigen des Menüs
+show_menu() {
+    echo "Wählen Sie einen SSH-Schlüssel zum Verwenden:"
+    echo "1: PYT-Github"
+    echo "2: Sergius-Github"
+    echo "Bitte geben Sie die Nummer des gewünschten Schlüssels ein:"
+}
+
+# Funktion zum Wechseln des SSH-Schlüssels
+switch_ssh_key() {
+    local key_path="${ssh_keys[$1]}"
+    if [ -z "$key_path" ]; then
+        echo "Ungültige Auswahl."
+        exit 1
+    fi
+
+    echo "Wechsel zu SSH-Schlüssel unter $key_path..."
+    ssh-add -D
+    ssh-add $key_path
+    echo "Aktueller Schlüssel ist jetzt: $key_path"
+}
+
+# Hauptlogik des Skripts
+show_menu
+read -r selection
+switch_ssh_key "$selection"

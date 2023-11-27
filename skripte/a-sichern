@@ -59,6 +59,7 @@ if [ -d "$ziel" ]; then
 		# meine eigenen Scripte auf GitHub sichern
 		rsync -avh /home/sergi/.local/bin/a-farbe		"/home/sergi/GitHub/meine-LARBS-anpassungen/skripte"
 		rsync -avh /home/sergi/.local/bin/a-sichern		"/home/sergi/GitHub/meine-LARBS-anpassungen/skripte"
+		rsync -avh /home/sergi/.local/bin/a-ssh			"/home/sergi/GitHub/meine-LARBS-anpassungen/skripte"
 		# Trennlinie
 		echo -e "${BLUE}$FRAME${NC}"
 		# Anzeige der Gesamtgröße des Backup-Verzeichnissesi
