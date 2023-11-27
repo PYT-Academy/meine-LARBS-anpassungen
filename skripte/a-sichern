@@ -51,6 +51,8 @@ if [ -d "$ziel" ]; then
 		rsync -avh /home/sergi/.config/shell/aliasrc		"$data/.config/shell/"
 		rsync -avh /home/sergi/.local/src			"$data/.local/"
 		rsync -avh /home/sergi/.config/zsh/.zshrc		"$data/.config/zsh/"
+		rsync -avh /home/sergi/GitHub				"$data"
+		rsync -avh /home/sergi/hugo				"$data"
 		rsync -avh /home/sergi/Dokumente			"$data"
 		rsync -avh /home/sergi/Calibre-Bibliothek		"$data"
 		rsync -avh /home/sergi/Bilder				"$data"
