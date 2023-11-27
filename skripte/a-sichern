@@ -40,15 +40,17 @@ if [ -d "$ziel" ]; then
 			"$data/.local/bin" \
 			"$data/.config/shell/aliasrc" \
 			"$data/.local/src" \
+			"$data/.config/newsboat" \
 			"$data/.config/zsh"
 		# Kopieren der verschiedenen Daten mit Fortschrittsbalken
 		echo -e "${GREEN}Synchronisiere Daten...${NC}"
-		rsync -avh /home/sergi/.config/kak			"$data/.config/kak/"
-		rsync -avh /home/sergi/.config/mc			"$data/.config/mc/"
+		rsync -avh /home/sergi/.config/newsboat			"$data/.config/"
+		rsync -avh /home/sergi/.config/kak			"$data/.config/"
+		rsync -avh /home/sergi/.config/mc			"$data/.config/"
 		rsync -avh /home/sergi/.local/bin			"$data/.local/bin/"
-		rsync -avh /home/sergi/.config/shell/aliasrc		"$data/.config/shell/aliasrc/"
-		rsync -avh /home/sergi/.local/src			"$data/.local/scr/"
-		rsync -avh /home/sergi/.config/zsh/.zshrc		"$data/.config/zsh/.zshrc"
+		rsync -avh /home/sergi/.config/shell/aliasrc		"$data/.config/shell/"
+		rsync -avh /home/sergi/.local/src			"$data/.local/"
+		rsync -avh /home/sergi/.config/zsh/.zshrc		"$data/.config/zsh/"
 		rsync -avh /home/sergi/Dokumente			"$data"
 		rsync -avh /home/sergi/Calibre-Bibliothek		"$data"
 		rsync -avh /home/sergi/Bilder				"$data"
